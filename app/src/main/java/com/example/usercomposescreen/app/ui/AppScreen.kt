@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.usercomposescreen.app.viewModel.UserViewModel
 
 sealed class AppScreen(val route: String) {
     object UsersScreen : AppScreen("Users")
@@ -37,10 +38,11 @@ sealed class AppScreen(val route: String) {
 fun UserAppBar() {
     TopAppBar(
         title = {
-            Text(modifier = Modifier
-                .border(BorderStroke(2.dp, Color.Black))
-                .fillMaxWidth()
-                .padding(8.dp),
+            Text(
+                modifier = Modifier
+                    .border(BorderStroke(2.dp, Color.Black))
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 text = AppScreen.UsersScreen.route,
                 style = MaterialTheme.typography.headlineLarge
             )
@@ -61,28 +63,23 @@ fun UserComposeApp(
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
+    val userViewModel = UserViewModel()
+
     Scaffold(
         topBar = {
             UserAppBar()
-        }
-    ) { innerPadding ->
-
+        }) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = AppScreen.UsersScreen.route,
             modifier = modifier.padding(innerPadding)
         ) {
             composable(route = AppScreen.UsersScreen.route) {
-                UserScreen(Modifier.padding(innerPadding))
+                UserScreen(Modifier.padding(innerPadding), userViewModel) { user ->
+                    userViewModel.removeUser(user = user)
+                }
             }
         }
     }
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewScreen() {
-    UserComposeApp()
 }

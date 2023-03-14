@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.usercomposescreen.app.ui
 
 import androidx.compose.foundation.BorderStroke
@@ -24,6 +26,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -33,23 +37,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.usercomposescreen.app.viewModel.UserViewModel
 import com.example.usercomposescreen.data.User
-import com.example.usercomposescreen.data.UserData
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserScreen(modifier: Modifier = Modifier) {
-    var itemList = UserData.posts.toList()
-    val mutableUserList = remember { itemList.toMutableStateList() }
+fun UserScreen(modifier: Modifier = Modifier, userViewModel: UserViewModel, onUserItemClicked: (User)->Unit) {
+    val mutableStateList = userViewModel.userListFlow.collectAsState()
 
+    UserFlowList(mutableStateList) { user ->
+        onUserItemClicked(user)
+    }
+}
+
+
+@Composable
+fun UserFlowList(userList: State<List<User>>, onItemClicked: (User)->Unit) {
     LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        ) {
-        itemsIndexed(mutableUserList) { index: Int, item: User ->
+        verticalArrangement = Arrangement.spacedBy(20.dp),) {
+        itemsIndexed(userList.value) { index: Int, item: User ->
             Card(onClick = {
-                if (index >= 0) {
-                    mutableUserList.removeAt(index)
-                }
+                if (index >= 0) onItemClicked(item)
             },
                 shape = RoundedCornerShape(50.dp),
                 border = BorderStroke(3.dp, Color.Black),
@@ -61,6 +68,7 @@ fun UserScreen(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 @Composable
 fun UserEntry(index: Int, item: User) {

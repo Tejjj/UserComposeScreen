@@ -1,4 +1,4 @@
-package com.example.usercomposescreen
+package com.example.usercomposescreen.app.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,25 +18,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             UserComposeScreenTheme {
-                // A surface container using the 'background' color from the theme
                 UserComposeApp()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    UserComposeScreenTheme {
-        Greeting("Android")
     }
 }
