@@ -5,15 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.usercomposescreen.data.User
 import com.example.usercomposescreen.data.UserLocalRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class UserViewModel : ViewModel() {
+@HiltViewModel
+class UserViewModel @Inject constructor(repository: UserLocalRepository) : ViewModel() {
 
-    private var itemList = UserLocalRepository().fetchUserList()
+    private var itemList = repository.fetchUserList()
     private val mutableUserList =  itemList.toMutableStateList()
 
     private val _userListFlow = MutableStateFlow(mutableUserList)

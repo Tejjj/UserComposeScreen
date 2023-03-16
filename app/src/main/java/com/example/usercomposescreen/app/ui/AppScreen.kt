@@ -1,5 +1,5 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
 )
 
 package com.example.usercomposescreen.app.ui
@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -64,7 +65,7 @@ fun UserComposeApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    val userViewModel = UserViewModel()
+    val userViewModel: UserViewModel = hiltViewModel()
 
     Scaffold(
         topBar = {
