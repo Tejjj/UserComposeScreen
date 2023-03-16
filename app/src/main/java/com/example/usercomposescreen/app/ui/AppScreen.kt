@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.example.usercomposescreen.app.ui
 
@@ -56,13 +58,12 @@ fun UserAppBar() {
     )
 }
 
-
+@ExperimentalMaterial3Api
 @Composable
 fun UserComposeApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    val backStackEntry by navController.currentBackStackEntryAsState()
     val userViewModel = UserViewModel()
 
     Scaffold(
@@ -75,7 +76,7 @@ fun UserComposeApp(
             modifier = modifier.padding(innerPadding)
         ) {
             composable(route = AppScreen.UsersScreen.route) {
-                UserScreen(Modifier.padding(innerPadding), userViewModel) { user ->
+                UserScreen(userViewModel) { user ->
                     userViewModel.removeUser(user = user)
                 }
             }
