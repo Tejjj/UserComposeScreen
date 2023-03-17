@@ -24,7 +24,7 @@ class UserViewModel @Inject constructor(repository: UserLocalRepository) : ViewM
 
     init {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 if(itemList.isEmpty()) {
                     itemList = UserLocalRepository().fetchUserList()
                 }

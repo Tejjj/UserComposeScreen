@@ -1,9 +1,3 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
-)
-
 package com.example.usercomposescreen.app.ui
 
 import android.util.Log
@@ -33,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,33 +43,35 @@ import com.example.usercomposescreen.data.UserData
 const val TAG: String = "Tejaswini"
 
 @Composable
-fun UserScreen(userViewModel: UserViewModel, onUserItemClicked: (User) -> Unit) {
+fun UserScreen(userViewModel: UserViewModel, onUserItemClick: (User) -> Unit) {
+    val scope = rememberCoroutineScope()
     val mutableStateList = userViewModel.userListFlow.collectAsState()
 
     UserFlowList(mutableStateList) { user ->
-        onUserItemClicked(user)
+        onUserItemClick(user)
     }
 }
 
 @Composable
-fun UserFlowList(userList: State<List<User>>, onItemClicked: (User) -> Unit) {
+fun UserFlowList(userList: State<List<User>>, onItemClick: (User) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         itemsIndexed(userList.value) { index: Int, item: User ->
             CardPlaceholder(index, item) {
-                onItemClicked(item)
+                onItemClick(item)
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardPlaceholder(index: Int, item: User, onItemClicked: (User) -> Unit) {
+fun CardPlaceholder(index: Int, item: User, onItemClick: (User) -> Unit) {
     Card(
         onClick = {
-            if (index >= 0) onItemClicked(item)
+            if (index >= 0) onItemClick(item)
         },
         shape = RoundedCornerShape(50.dp),
         border = BorderStroke(3.dp, Color.Black),
@@ -107,13 +104,11 @@ fun UserPosition(index: Int, userItem: User, modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .padding(8.dp)
-            .widthIn(min = 64.dp)
             .paddingFromBaseline(top = 8.dp)
     ) {
         UserTextComposable(
             "username: ${userItem.fullName}",
             modifier = Modifier
-                .paddingFromBaseline(top = 8.dp)
                 .align(Alignment.Start)
         )
 
@@ -172,7 +167,8 @@ fun UserInfo(userItem: User, modifier: Modifier) {
 @Composable
 fun UserTextComposable(displayValue: String, modifier: Modifier) {
     Text(
-        text = displayValue, fontSize = 14.sp, modifier = modifier,
+        text = displayValue,
+        fontSize = 14.sp, modifier = modifier,
         overflow = TextOverflow.Ellipsis,
         maxLines = 1
     )
