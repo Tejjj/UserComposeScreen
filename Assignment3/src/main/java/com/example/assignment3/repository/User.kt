@@ -31,28 +31,45 @@ val nameList = listOf(
     UserStringPair("Mikel", "Jackson"),
     UserStringPair("Steve", "Jobs"),
     UserStringPair("Daniel", "Tiger"),
-    UserStringPair("TomCruise", "Cruise")
+    UserStringPair("TomCruise", "Cruise"),
+    UserStringPair("Mikel", "Jackson"),
+    UserStringPair("Mikel", "Jackson"),
+    UserStringPair("Steve", "Jobs"),
+    UserStringPair("Daniel", "Tiger"),
+    UserStringPair("TomCruise", "Cruise"),
+    UserStringPair("Rogerrr", "Federer"),
+    UserStringPair("Rafaelll", "Nadal"),
+    UserStringPair("Sachin", "Tendulkar"),
+    UserStringPair("Viratt", "Kohli"),
+    UserStringPair("Virendar", "Sehwag"),
+    UserStringPair("Sania", "Mirza")
 
 )
 data class UserStringPair(val firstName: String, val lastName: String)
 
-object UserData {
-    fun getUserList() : List<User>{
-        var userList = mutableListOf<User>()
-        nameList.forEachIndexed { index, userStringPair ->
-            userList.add(User(index+1,
-                name = "${nameList.get(index).firstName}",
-                fullname = "${nameList.get(index).lastName}",
-                email = "${nameList.get(index).firstName}@gmail.com"))
-        }
-        return userList
-    }
+val userDataGenerator = generateSequence {
+    val randomValue = Random.nextInt(1, 15)
+    User(
+        // postId is a 8 digit Long value
+        userId = Random.nextInt(1, 1000),
+        name = "${nameList.get(randomValue).firstName}",
+        fullname = "${nameList.get(randomValue).lastName}",
+        email = "${nameList.get(randomValue).firstName}@gmail.com"
+    )
+}
 
-    fun adduser() : User {
-        val randomValue = Random.nextInt(1, 4)
-        return User(nameList.size+1,
+object UserData {
+
+    val userList = userDataGenerator.take(4).toMutableList()
+    fun addUser() : User {
+        val randomValue = Random.nextInt(1, 15)
+
+        val user = User(userList.size+1,
             name = "${nameList.get(randomValue).firstName}",
             fullname = "${nameList.get(randomValue).lastName}",
             email = "${nameList.get(randomValue).firstName}@gmail.com")
+
+        userList.add(user)
+        return user
     }
 }

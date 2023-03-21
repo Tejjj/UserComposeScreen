@@ -7,12 +7,12 @@ import javax.inject.Singleton
 
 @Singleton
 class DatabaseRepository @Inject constructor(private val userDao: UserDao) : Repository {
-    override suspend fun loadUserData() {
-        userDao.loadUserData(UserData.getUserList())
+    override suspend fun loadUserData(userList: List<User>) {
+        userDao.loadUserData(userList)
     }
 
-    override suspend fun insertUser() {
-        userDao.insertUser(UserData.adduser())
+    override suspend fun insertUser(user: User) {
+        userDao.insertUser(user)
     }
 
     suspend fun getUserList(): List<User> {
