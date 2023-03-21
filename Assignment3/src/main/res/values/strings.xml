@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">UserComposeScreen</string>
+    <string name="load_user">Add all users</string>
+    <string name="welcome_msg">Welcome to user list screen</string>
+    <string name="details_welcome_msg">Welcome to user detail screen</string>
+    <string name="back_button">Back Button</string>
+    <string name="btn_add_user">Click here to add user</string>
+
+
+
+</resources>
