@@ -64,15 +64,13 @@ fun UserListScreen(
     Scaffold(
         topBar = {
             UserAppBar(
-                title = AppScreen.UserListScreen.route,
+                title = AppScreen.UserDirectory.route,
                 canNavigateBack = false
             )
         }
     ) { innerPadding ->
         DisplayUserList(Modifier.padding(innerPadding), userList, addUserEntry = {
-            if(addUserEntry()) {
-            }
-
+            (addUserEntry()).let { }
         }) { userId ->
             onUserItemClicked(userId)
         }
@@ -85,7 +83,9 @@ fun DisplayUserList(
     modifier: Modifier = Modifier, userList: List<User>, addUserEntry: () -> Unit,
     onUserItemClicked: (Int) -> Unit
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier
+        .fillMaxSize()
+        .padding(top = 8.dp)) {
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center

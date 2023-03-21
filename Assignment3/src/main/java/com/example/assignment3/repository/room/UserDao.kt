@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import com.example.assignment3.repository.User
 import kotlinx.coroutines.flow.Flow
 
@@ -15,7 +16,7 @@ interface UserDao {
     suspend fun loadUserData(list: List<User>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
+    suspend fun insertUser(vararg user: User)
 
     @Query("SELECT * FROM users")
     fun getObservableUserList() : Flow<List<User>>

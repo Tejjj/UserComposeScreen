@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.assignment3.R
@@ -50,7 +51,7 @@ fun UserDetailsScreen(
     Scaffold(
         topBar = {
             UserAppBar(
-                title = AppScreen.UserDetailScreen.route,
+                title = AppScreen.UserDirectory.route,
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp
             )
@@ -67,38 +68,43 @@ fun UserDetailsScreen(
 
             Text(
                 text = stringResource(id = R.string.details_welcome_msg),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleLarge,fontSize = 24.sp,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
             )
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 16.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
                     .background(Color.White)
             ) {
 
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(Color.White)
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(
                         text = "UserId : ${user?.userId ?: "UserId"}",
+                        fontSize = 18.sp,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
                         text = "Username : ${user?.name ?: "UserName"}",
-                        style = MaterialTheme.typography.titleSmall
+                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "fullName : ${user?.fullname ?: "UserName"}",
-                        style = MaterialTheme.typography.titleSmall
+                        text = "fullName : ${user?.fullname ?: "fullName"}",
+                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "email : ${user?.email ?: "UserName"}",
-                        style = MaterialTheme.typography.titleSmall
+                        text = "email : ${user?.email ?: "email"}",
+                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.titleMedium
                     )
 
                 }

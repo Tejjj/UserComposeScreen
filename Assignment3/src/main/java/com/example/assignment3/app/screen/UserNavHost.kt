@@ -42,11 +42,13 @@ fun UserNavHost(
             route = AppScreen.UserDetailScreen.route + "/{userId}",
             arguments = listOf(
                 navArgument("userId") {
-                    type = NavType.IntType
+                    type = NavType.IntType;
+                    defaultValue = 1
                 })
         ) { navBackStackEntry ->
-            val userId = navBackStackEntry.arguments?.getInt("item")
-            UserDetailsScreen(viewModel, userId, navigateBack = { navController.popBackStack() },
+            val userId = navBackStackEntry.arguments?.getInt("userId")
+            UserDetailsScreen(viewModel, userId,
+                navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() })
         }
     }

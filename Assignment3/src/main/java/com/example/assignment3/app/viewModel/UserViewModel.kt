@@ -45,7 +45,7 @@ class UserViewModel @Inject constructor(private val dbRepository: DatabaseReposi
     }
 
     fun getUser(userId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _userData.value = dbRepository.getUser(userId)
         }
     }
