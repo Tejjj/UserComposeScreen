@@ -11,9 +11,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class UserComposeActivity : ComponentActivity() {
 
-    private val userViewModel by viewModels<UserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val userViewModel:UserViewModel by viewModels()
+
         setContent {
             ComposeUserApp(userViewModel)
         }

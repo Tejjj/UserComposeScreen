@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.collect
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserDetailsScreen(
-    viewModel: UserViewModel, userId: Int?, navigateBack: () -> Unit,
+    viewModel: UserViewModel, userId: Int?,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true

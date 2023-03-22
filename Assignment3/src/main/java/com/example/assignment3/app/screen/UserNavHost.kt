@@ -1,11 +1,15 @@
 package com.example.assignment3.app.screen
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.assignment3.app.viewModel.UserViewModel
 
@@ -13,17 +17,20 @@ import com.example.assignment3.app.viewModel.UserViewModel
 fun UserNavHost(
     viewModel: UserViewModel,
     navController: NavHostController,
+    startDestinationScreen: String = AppScreen.MainScreen.route,
     modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.MainScreen.route,
+        startDestination = startDestinationScreen,
         modifier = modifier
     ) {
         composable(route = AppScreen.MainScreen.route) {
             MainScreen {
                 viewModel.loadUserList()
-                navController.navigate(AppScreen.UserListScreen.route)
+                navController.navigate(AppScreen.UserListScreen.route) {
+                    launchSingleTop = true
+                }
             }
         }
 
@@ -46,10 +53,9 @@ fun UserNavHost(
                     defaultValue = 1
                 })
         ) { navBackStackEntry ->
-            val userId = navBackStackEntry.arguments?.getInt("userId")
+            val userId = navBackStackEntry.arguments?.getInt("userId",1)
             UserDetailsScreen(viewModel, userId,
-                navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() })
+                onNavigateUp = { navController.popBackStack() })
         }
     }
 }

@@ -45,7 +45,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.assignment3.R
 import com.example.assignment3.app.viewModel.UserViewModel
 import com.example.assignment3.repository.User
-import com.example.assignment3.repository.UserData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +69,8 @@ fun UserListScreen(
         }
     ) { innerPadding ->
         DisplayUserList(Modifier.padding(innerPadding), userList, addUserEntry = {
-            (addUserEntry()).let { }
+            addUserEntry()
+
         }) { userId ->
             onUserItemClicked(userId)
         }

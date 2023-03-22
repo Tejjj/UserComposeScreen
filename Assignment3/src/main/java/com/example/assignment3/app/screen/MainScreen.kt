@@ -22,7 +22,6 @@ import com.example.assignment3.R
 @Composable
 fun MainScreen(loadUser: () -> Unit) {
 
-    //UserAppBar(AppScreen.UserDirectory.route)
     Scaffold(
         topBar = {
             UserAppBar(
@@ -36,8 +35,6 @@ fun MainScreen(loadUser: () -> Unit) {
         }
 
     }
-
-
 }
 
 @Composable
@@ -45,7 +42,6 @@ fun LoadButton(modifier: Modifier = Modifier, loadUser: () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            //.padding(innerPadding)
             .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

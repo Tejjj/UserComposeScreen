@@ -1,6 +1,7 @@
 package com.example.assignment3.repository.datastore
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -12,33 +13,22 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
-val Context.dataStore by preferencesDataStore(name = "my_datastore")
+val Context.dataStore by preferencesDataStore(name = "user_datastore")
 
 class DataStoreManager @Inject constructor(
     @ApplicationContext val context: Context
 ) {
     private object PreferencesKeys {
-        val USER_ID = intPreferencesKey(name = "userId")
-        val NAME = stringPreferencesKey(name = "name")
-        val FULL_NAME = stringPreferencesKey(name = "fullname")
-        val EMAIL = stringPreferencesKey(name = "email")
+        val IS_USER_AVAILABLE = booleanPreferencesKey(name = "hasUserData")
     }
 
-    suspend fun saveUserIno(user: User) {
+    suspend fun saveUser(userAdded: Boolean) {
         context.dataStore.edit { preference ->
-            preference[PreferencesKeys.USER_ID] = user.userId
-            preference[PreferencesKeys.NAME] = user.name
-            preference[PreferencesKeys.FULL_NAME] = user.fullname
-            preference[PreferencesKeys.EMAIL] = user.email
+            preference[PreferencesKeys.IS_USER_AVAILABLE] = userAdded
         }
     }
 
-    val userPreferenceFlow: Flow<User> = context.dataStore.data.map { preference ->
-        val userId = preference[PreferencesKeys.USER_ID] ?: 0
-        val name = preference[PreferencesKeys.NAME] ?: "name"
-        val fullName = preference[PreferencesKeys.FULL_NAME] ?: "full name"
-        val email = preference[PreferencesKeys.EMAIL] ?: "email"
-
-        User(userId, name, fullName, email)
+    val isUserPresent = context.dataStore.data.map { preference ->
+        preference[PreferencesKeys.IS_USER_AVAILABLE] ?: false
     }
 }
