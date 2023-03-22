@@ -28,9 +28,10 @@ fun UserNavHost(
         composable(route = AppScreen.MainScreen.route) {
             MainScreen {
                 viewModel.loadUserList()
-                navController.navigate(AppScreen.UserListScreen.route) {
+                /*navController.navigate(AppScreen.UserListScreen.route) {
                     launchSingleTop = true
-                }
+                }*/
+                navController.popBackStack(route = AppScreen.UserListScreen.route,inclusive = true, saveState = false)
             }
         }
 
