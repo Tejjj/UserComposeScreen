@@ -3,6 +3,7 @@ package com.example.assignment3.app.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,12 +41,41 @@ fun UserDetailsScreen(
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true
 ) {
+    if (userId == null) {
+        Scaffold(
+            topBar = {
+                UserAppBar(
+                    title = AppScreen.UserDirectory.route,
+                    canNavigateBack = canNavigateBack,
+                    navigateUp = onNavigateUp
+                )
+            }) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "User information is not present for this user, Please try with correct User id.")
+            }
+        }
+        return
+    }
+
+    DisplayUserDetails(viewModel, userId = userId, onNavigateUp, canNavigateBack = true)
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DisplayUserDetails(
+    viewModel: UserViewModel, userId: Int, onNavigateUp: () -> Unit,
+    canNavigateBack: Boolean = true
+) {
     val user by remember { viewModel.userData }.collectAsState()
 
     LaunchedEffect(Unit) {
-        userId?.let {
-            viewModel.getUser(userId)
-        }
+        viewModel.getUser(userId)
     }
 
     Scaffold(
@@ -68,7 +98,7 @@ fun UserDetailsScreen(
 
             Text(
                 text = stringResource(id = R.string.details_welcome_msg),
-                style = MaterialTheme.typography.titleLarge,fontSize = 24.sp,
+                style = MaterialTheme.typography.titleLarge, fontSize = 24.sp,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
             )
 

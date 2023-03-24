@@ -63,7 +63,6 @@ fun UserAppBar() {
         modifier = Modifier
             .fillMaxWidth()
             .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant))
-
     )
 }
 

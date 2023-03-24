@@ -1,25 +1,30 @@
 package com.example.assignment3.app.screen
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.assignment3.app.viewModel.UserViewModel
 
 @Composable
 fun UserNavHost(
     viewModel: UserViewModel,
-    navController: NavHostController,
+    navController: NavHostController = rememberNavController(),
     startDestinationScreen: String = AppScreen.MainScreen.route,
     modifier: Modifier = Modifier
 ) {
+    var context = LocalContext.current
+
     NavHost(
         navController = navController,
         startDestination = startDestinationScreen,
@@ -28,9 +33,6 @@ fun UserNavHost(
         composable(route = AppScreen.MainScreen.route) {
             MainScreen {
                 viewModel.loadUserList()
-                /*navController.navigate(AppScreen.UserListScreen.route) {
-                    launchSingleTop = true
-                }*/
                 navController.popBackStack(route = AppScreen.UserListScreen.route,inclusive = true, saveState = false)
             }
         }
@@ -51,10 +53,9 @@ fun UserNavHost(
             arguments = listOf(
                 navArgument("userId") {
                     type = NavType.IntType;
-                    defaultValue = 1
                 })
         ) { navBackStackEntry ->
-            val userId = navBackStackEntry.arguments?.getInt("userId",1)
+            val userId = navBackStackEntry.arguments?.getInt("userId")
             UserDetailsScreen(viewModel, userId,
                 onNavigateUp = { navController.popBackStack() })
         }

@@ -1,6 +1,7 @@
 package com.example.assignment3.app.screen
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -54,41 +56,51 @@ fun UserListScreen(
     onUserItemClicked: (Int) -> Unit
 ) {
 
+    val context = LocalContext.current
     val userList by remember { viewModel.userList }.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getObservableUserList()
     }
 
-    Scaffold(
-        topBar = {
-            UserAppBar(
-                title = AppScreen.UserDirectory.route,
-                canNavigateBack = false
+    Scaffold(topBar = {
+        UserAppBar(
+            title = AppScreen.UserDirectory.route, canNavigateBack = false
+        )
+    }, bottomBar = {
+        Button(modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 20.dp, horizontal = 12.dp),
+            onClick = {
+                addUserEntry()
+                Toast.makeText(context, context.getString(R.string.user_added_msg), Toast.LENGTH_SHORT).show()
+            }) {
+            Text(
+                text = stringResource(id = R.string.btn_add_user),
+                fontSize = 28.sp,
+                style = MaterialTheme.typography.headlineLarge
             )
         }
-    ) { innerPadding ->
-        DisplayUserList(Modifier.padding(innerPadding), userList, addUserEntry = {
-            addUserEntry()
-
-        }) { userId ->
+    }) { innerPadding ->
+        DisplayUserList(Modifier.padding(innerPadding), userList) { userId ->
             onUserItemClicked(userId)
         }
-
     }
 }
 
 @Composable
 fun DisplayUserList(
-    modifier: Modifier = Modifier, userList: List<User>, addUserEntry: () -> Unit,
+    modifier: Modifier = Modifier,
+    userList: List<User>,
     onUserItemClicked: (Int) -> Unit
 ) {
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(top = 8.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = 8.dp)
+    ) {
         Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
         ) {
             Text(text = stringResource(id = R.string.welcome_msg), fontSize = 24.sp)
         }
@@ -103,23 +115,6 @@ fun DisplayUserList(
                 }
             }
         }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 20.dp, horizontal = 12.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(onClick = {
-                addUserEntry()
-            }) {
-                Text(
-                    text = stringResource(id = R.string.btn_add_user),
-                    fontSize = 28.sp,
-                    style = MaterialTheme.typography.headlineLarge
-                )
-            }
-        }
     }
 }
 
@@ -132,8 +127,7 @@ fun CardPlaceholder(index: Int, item: User, onItemClick: (User) -> Unit) {
         },
         shape = RoundedCornerShape(50.dp),
         border = BorderStroke(3.dp, Color.Black),
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         UserEntry(index = index, item = item)
     }
@@ -164,8 +158,7 @@ fun UserPosition(index: Int, userItem: User, modifier: Modifier) {
             .paddingFromBaseline(top = 8.dp)
     ) {
         UserTextComposable(
-            "username: ${userItem.name}", modifier = Modifier
-                .align(Alignment.Start)
+            "username: ${userItem.name}", modifier = Modifier.align(Alignment.Start)
         )
 
         Button(
@@ -203,18 +196,15 @@ fun UserInfo(userItem: User, modifier: Modifier) {
             .paddingFromBaseline(top = 8.dp)
     ) {
         UserTextComposable(
-            "UserId: ${userItem.userId}",
-            modifier = Modifier.align(Alignment.Start)
+            "UserId: ${userItem.userId}", modifier = Modifier.align(Alignment.Start)
         )
 
         UserTextComposable(
-            "fullName: ${userItem.fullname}",
-            modifier = Modifier.align(Alignment.Start)
+            "fullName: ${userItem.fullname}", modifier = Modifier.align(Alignment.Start)
         )
 
         UserTextComposable(
-            "email: ${userItem.email}",
-            modifier = Modifier.align(Alignment.Start)
+            "email: ${userItem.email}", modifier = Modifier.align(Alignment.Start)
         )
 
     }
@@ -224,7 +214,8 @@ fun UserInfo(userItem: User, modifier: Modifier) {
 fun UserTextComposable(displayValue: String, modifier: Modifier) {
     Text(
         text = displayValue,
-        fontSize = 14.sp, modifier = modifier,
+        fontSize = 14.sp,
+        modifier = modifier,
         overflow = TextOverflow.Ellipsis,
         maxLines = 1
     )

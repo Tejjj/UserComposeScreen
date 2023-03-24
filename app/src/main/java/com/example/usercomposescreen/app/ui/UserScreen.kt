@@ -1,6 +1,7 @@
 package com.example.usercomposescreen.app.ui
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,9 +48,11 @@ const val TAG: String = "Tejaswini"
 fun UserScreen(userViewModel: UserViewModel, onUserItemClick: (User) -> Unit) {
     val scope = rememberCoroutineScope()
     val mutableStateList = userViewModel.userListFlow.collectAsState()
+    val context = LocalContext.current
 
     UserFlowList(mutableStateList) { user ->
         onUserItemClick(user)
+        Toast.makeText(context, "User has been deleted.", Toast.LENGTH_SHORT).show()
     }
 }
 
