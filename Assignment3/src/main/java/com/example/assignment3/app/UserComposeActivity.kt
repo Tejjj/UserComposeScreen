@@ -15,24 +15,25 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class UserComposeActivity : ComponentActivity() {
-    private val userViewModel:UserViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         installSplashScreen()
 
         lifecycleScope.launch {
-            userViewModel.userAvailable.collect{isDataAvailable->
-                if(isDataAvailable) {
-                    setContent {
-                        UserNavHost(userViewModel, startDestinationScreen = AppScreen.UserListScreen.route)
-                    }
-                } else {
-                    setContent {
-                        UserNavHost(userViewModel, startDestinationScreen = AppScreen.MainScreen.route)
-                    }
-                }
+            userViewModel.userAvailable.collect { isDataAvailable ->
 
+                setContent {
+                    UserNavHost(
+                        userViewModel,
+                        startDestinationScreen = if (isDataAvailable) {
+                            AppScreen.UserListScreen.route
+                        } else {
+                            AppScreen.MainScreen.route
+                        }
+                    )
+                }
             }
         }
     }

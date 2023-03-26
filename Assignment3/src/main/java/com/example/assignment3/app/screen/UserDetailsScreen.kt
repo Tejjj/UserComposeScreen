@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.assignment3.R
@@ -36,40 +37,9 @@ import kotlinx.coroutines.flow.collect
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserDetailsScreen(
-    viewModel: UserViewModel, userId: Int?,
+    viewModel: UserViewModel,
+    userId: Int,
     onNavigateUp: () -> Unit,
-    modifier: Modifier = Modifier,
-    canNavigateBack: Boolean = true
-) {
-    if (userId == null) {
-        Scaffold(
-            topBar = {
-                UserAppBar(
-                    title = AppScreen.UserDirectory.route,
-                    canNavigateBack = canNavigateBack,
-                    navigateUp = onNavigateUp
-                )
-            }) { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "User information is not present for this user, Please try with correct User id.")
-            }
-        }
-        return
-    }
-
-    DisplayUserDetails(viewModel, userId = userId, onNavigateUp, canNavigateBack = true)
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DisplayUserDetails(
-    viewModel: UserViewModel, userId: Int, onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true
 ) {
     val user by remember { viewModel.userData }.collectAsState()
@@ -136,10 +106,9 @@ fun DisplayUserDetails(
                         fontSize = 18.sp,
                         style = MaterialTheme.typography.titleMedium
                     )
-
                 }
             }
         }
-
     }
 }
+

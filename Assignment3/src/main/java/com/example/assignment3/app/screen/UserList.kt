@@ -1,6 +1,5 @@
 package com.example.assignment3.app.screen
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
@@ -40,10 +38,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.assignment3.R
 import com.example.assignment3.app.viewModel.UserViewModel
 import com.example.assignment3.repository.User
@@ -52,8 +50,8 @@ import com.example.assignment3.repository.User
 @Composable
 fun UserListScreen(
     viewModel: UserViewModel = hiltViewModel(),
-    addUserEntry: () -> Boolean,
-    onUserItemClicked: (Int) -> Unit
+    navController: NavHostController/*,
+    onUserItemClicked: (Int) -> Unit*/
 ) {
 
     val context = LocalContext.current
@@ -72,7 +70,7 @@ fun UserListScreen(
             .fillMaxWidth()
             .padding(vertical = 20.dp, horizontal = 12.dp),
             onClick = {
-                addUserEntry()
+                viewModel.addUser()
                 Toast.makeText(context, context.getString(R.string.user_added_msg), Toast.LENGTH_SHORT).show()
             }) {
             Text(
@@ -83,7 +81,8 @@ fun UserListScreen(
         }
     }) { innerPadding ->
         DisplayUserList(Modifier.padding(innerPadding), userList) { userId ->
-            onUserItemClicked(userId)
+            navController.navigate(AppScreen.UserDetailScreen.route + "/$userId")
+            //onUserItemClicked(userId)
         }
     }
 }

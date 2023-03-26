@@ -32,67 +32,64 @@ class UserViewModel @Inject constructor(
     private val _userAvailable = MutableStateFlow(false)
     var userAvailable = _userAvailable.asStateFlow()
 
-    val isUserAvailable: StateFlow<Boolean> = dataStoreManager.isUserPresent.stateIn(
+    private val isUserAvailable: StateFlow<Boolean> = dataStoreManager.isUserPresent.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = false
     )
+
     fun savedUserState(userAdded: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         dataStoreManager.saveUser(userAdded)
     }
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            viewModelScope.launch(Dispatchers.IO) {
-                isUserAvailable.collect { userStatus ->
-                    _userAvailable.value = userStatus
-                }
+        viewModelScope.launch {
+            isUserAvailable.collect { userStatus ->
+                _userAvailable.value = userStatus
             }
         }
     }
+
     fun loadUserList() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             dbRepository.loadUserData(UserData.userList.toList())
-            savedUserState(true)
         }
     }
 
     fun addUser() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             dbRepository.insertUser(UserData.addUser())
-            savedUserState(true)
         }
     }
 
     fun getObservableUserList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            dbRepository.getObservableUserList().collect() { userList ->
+        viewModelScope.launch {
+            dbRepository.getObservableUserList().collect { userList ->
                 _userList.value = userList
             }
         }
     }
 
     fun getUser(userId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _userData.value = dbRepository.getUser(userId)
         }
     }
 
     private fun clearUserData(userList: List<User>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             dbRepository.clearUserEntries(userList)
             savedUserState(false)
         }
     }
 
     fun deleteAllUsers() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             var uList = dbRepository.getUserList()
 
             if (uList.isEmpty()) return@launch
 
             clearUserData(uList)
-            //dbRepository.clearUserEntries(uList)
         }
     }
 

@@ -14,13 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.assignment3.R
+import com.example.assignment3.app.viewModel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(loadUser: () -> Unit) {
+fun MainScreen(viewModel: UserViewModel, navController: NavHostController) {
 
     Scaffold(
         topBar = {
@@ -31,7 +33,12 @@ fun MainScreen(loadUser: () -> Unit) {
         }
     ) { innerPadding ->
         LoadButton(Modifier.padding(innerPadding)) {
-            loadUser()
+            viewModel.loadUserList()
+            viewModel.savedUserState(true)
+
+            navController.popBackStack(
+                route = AppScreen.UserListScreen.route, inclusive = true, saveState = false
+            )
         }
 
     }
