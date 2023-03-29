@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Assignment4_pagination</string>
+    <string name="load_user">Add all users</string>
+    <string name="welcome_msg">Welcome to user list screen</string>
+    <string name="details_welcome_msg">Welcome to user detail screen</string>
+    <string name="back_button">Back Button</string>
+    <string name="btn_add_user">Click here to add user</string>
+    <string name="user_added_msg">New user has been added</string>
+    <string name="retry">Retry</string>
+    <string name="end_of_pagination">End of pagination</string>
+    <string name="no_user">No result found for this user</string>
+    <string name="placeholder_search">Enter username to search</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="repository">Repository</string>
+    <string name="bio">Biography</string>
+    <string name="search_users">Search users</string>
+
+</resources>

@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "UserComposeScreen"
 include ':app'
 include ':Assignment3'
+include ':assignment4_pagination'
