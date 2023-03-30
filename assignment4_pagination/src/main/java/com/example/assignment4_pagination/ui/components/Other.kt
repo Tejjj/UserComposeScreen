@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -27,11 +30,22 @@ fun VerticalSpacer(size: Int) = Spacer(modifier = Modifier.height(size.dp))
 
 @Composable
 fun VerticalDivider(size: Int, color: Color) {
+    Divider(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(size.dp),
+        color = Color.Black
+    )
+}
+
+@Composable
+fun VerticalSpacer(size: Int, color: Color) {
     Spacer(
         modifier = Modifier
             .width(size.dp)
             .border(width = size.dp, color = color)
     )
+
 }
 
 @Composable
@@ -57,9 +71,9 @@ fun LoadingProgressBar(
     modifier: Modifier = Modifier,
     size: Dp = 40.dp,
     color: Color = MaterialTheme.colorScheme.primary,
-    strokeWidth: Dp = 4.dp
+    strokeWidth: Dp = 8.dp
 ) {
-    Box(modifier = modifier) {
+    Box(modifier = modifier.fillMaxSize()) {
         CircularProgressIndicator(
             modifier = Modifier
                 .size(size)
@@ -77,7 +91,9 @@ fun RetryItem(
     onRetryClick: () -> Unit
 ) {
     Row(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {

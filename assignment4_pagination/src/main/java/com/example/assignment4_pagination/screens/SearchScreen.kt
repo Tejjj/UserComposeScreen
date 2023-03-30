@@ -1,5 +1,6 @@
 package com.example.assignment4_pagination.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,12 +48,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -86,14 +89,14 @@ fun SearchScreen(
 ) {
     val context = LocalContext.current
 
-    var repositories = remember { searchViewModel.userSearchResults }.collectAsLazyPagingItems()
+    val repositories = remember { searchViewModel.userSearchResults }.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
             UserAppBar(title = AppScreen.SearchScreen.route, canNavigateBack = false)
-        },
-        containerColor = MaterialTheme.colorScheme.surface
+        }, containerColor = MaterialTheme.colorScheme.surface
     ) { innerPadding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -101,7 +104,8 @@ fun SearchScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            UserSearchView(modifier, onSearch = {searchQuery ->
+
+            SearchBar(modifier, onSearch = { searchQuery ->
                 if (!searchQuery.isEmpty()) {
                     repositories.refresh()
                     searchViewModel.setSearch(searchQuery)
@@ -123,9 +127,9 @@ fun SearchScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun UserSearchView(
+fun SearchBar(
     modifier: Modifier = Modifier, onSearch: (String) -> Unit, onClearedUserSearch: () -> Unit
 ) {
     var searchQuery by rememberSaveable {
@@ -134,35 +138,43 @@ fun UserSearchView(
 
     val focusManager = LocalFocusManager.current
 
+    val keyBoardController = LocalSoftwareKeyboardController.current
+
     Column(modifier = modifier.padding(PaddingValues(horizontal = 8.dp, vertical = 16.dp))) {
-        OutlinedTextField(
+        TextField(
+            modifier = modifier
+                .padding(PaddingValues(8.dp))
+                .fillMaxWidth()
+                .heightIn(min = 56.dp)
+                .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
             value = searchQuery,
             onValueChange = { searchQuery = it },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Search, contentDescription = null)
             },
             trailingIcon = {
-                IconButton(
-                    onClick = {
-                        searchQuery = ""
-                        onClearedUserSearch()
-                    }
-                ) {
+                IconButton(onClick = {
+                    searchQuery = ""
+                    onClearedUserSearch()
+                }) {
                     Icon(
-                        Icons.Default.Clear,
-                        contentDescription = "Clear search"
+                        Icons.Default.Clear, contentDescription = "Clear search"
                     )
                 }
             },
-            colors = TextFieldDefaults.textFieldColors(MaterialTheme.colorScheme.surface),
+            colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.background),
             placeholder = {
                 Text(stringResource(R.string.placeholder_search))
             },
-            modifier = modifier
-                .padding(PaddingValues(8.dp))
-                .fillMaxWidth()
-                .heightIn(min = 56.dp),
-            singleLine = true
+            singleLine = true,
+            keyboardActions = KeyboardActions(onSearch = {
+                onSearch(searchQuery)
+                keyBoardController?.hide()
+                focusManager.clearFocus()
+            }),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Ascii, imeAction = ImeAction.Search
+            )
         )
 
         VerticalSpacer(size = 10)
@@ -170,6 +182,8 @@ fun UserSearchView(
         Button(
             onClick = {
                 onSearch(searchQuery)
+                keyBoardController?.hide()
+                focusManager.clearFocus()
             },
             modifier = Modifier
                 .padding(PaddingValues(horizontal = 16.dp, vertical = 8.dp))
@@ -195,8 +209,7 @@ fun SearchRepositoryResultUI(
         items(repositories) { repository ->
             repository?.let {
                 RepositoryItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    userRepository = it
+                    modifier = Modifier.fillMaxWidth(), userRepository = it
                 ) { userName ->
                     onUserClicked(userName)
                 }
@@ -250,10 +263,9 @@ fun RepositoryItem(
     ElevatedCard(modifier = modifier
         .fillMaxWidth()
         .padding(horizontal = 16.dp, vertical = 8.dp)
-        .background(MaterialTheme.colorScheme.background),
-        onClick = {
-            onUserClicked(userRepository.userName)
-        }) {
+        .background(MaterialTheme.colorScheme.background), onClick = {
+        onUserClicked(userRepository.userName)
+    }) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

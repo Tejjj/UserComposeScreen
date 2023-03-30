@@ -8,6 +8,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.compose.LazyPagingItems
 import com.example.assignment4_pagination.model.UserRepository
 import com.example.assignment4_pagination.network.GithubApiService
 import com.example.assignment4_pagination.repositoty.NetworkRepository
@@ -17,9 +18,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -30,12 +33,7 @@ class SearchViewModel @Inject constructor(
 
     private val _search = MutableStateFlow("")
 
-    val search = _search.asStateFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = "",
-        )
+    private val search = _search.asStateFlow()
 
     val userSearchResults = search.debounce(300.milliseconds).flatMapLatest { query ->
         networkRepository

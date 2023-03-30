@@ -10,7 +10,7 @@ const val FIRST_PAGE = 1
 
 class RepositoryPagingDataSource(
     private val apiService: GithubApiService,
-    private var searchQuery: String
+    private val searchQuery: String
 ) : PagingSource<Int, UserRepository>() {
     override fun getRefreshKey(state: PagingState<Int, UserRepository>): Int? {
         return return state.anchorPosition?.let { anchorPosition ->
