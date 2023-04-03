@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -45,6 +46,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -99,7 +101,8 @@ fun UserProfileScreen(
         }, containerColor = MaterialTheme.colorScheme.surface
     ) { innerPadding ->
         UserPostGridItems(
-            Modifier.padding(innerPadding), userProfile = userProfile?.value, userPosts = userPosts) { userPostId ->
+            Modifier.padding(innerPadding), userProfile = userProfile?.value, userPosts = userPosts
+        ) { userPostId ->
             navController.navigate(AppScreen.UserPostDetailScreen.withArgs(userPostId))
         }
     }
@@ -159,9 +162,12 @@ fun UserPostGridItems(
     }
 }
 
-fun LazyGridScope.loadUserPosts(userPosts: LazyPagingItems<UserPostsResponse>, onPostClicked: (String) -> Unit) {
+fun LazyGridScope.loadUserPosts(
+    userPosts: LazyPagingItems<UserPostsResponse>,
+    onPostClicked: (String) -> Unit
+) {
     pagingItems(userPosts) { userPostItem ->
-        UserPostUI(userPostItem) { postId->
+        UserPostUI(userPostItem) { postId ->
             onPostClicked(postId)
         }
     }
@@ -188,7 +194,7 @@ fun UserProfileUI(modifier: Modifier = Modifier, userDetails: ProfileResponse?) 
     Box(modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(2.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             ProfileUI(userDetails)
 
@@ -218,9 +224,10 @@ fun ProfileUI(userDetails: ProfileResponse?) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         ProfileImage(
-            modifier = Modifier.border(BorderStroke(1.dp, Color.Gray)),
-            profileImage = userDetails?.profileImageUrl,
-            120
+            modifier = Modifier
+                .size(120.dp)
+                .clip(CircleShape),
+            profileImage = userDetails?.profileImageUrl
         )
         Column(
             modifier = Modifier
@@ -255,12 +262,15 @@ fun ProfileUI(userDetails: ProfileResponse?) {
 @Composable
 fun TextUI(
     modifier: Modifier = Modifier,
+    color: Color = Color.Black,
     textStyle: TextStyle,
     textSize: Int,
     value: String,
     fontWeight: FontWeight = FontWeight.Normal
 ) {
     Text(
+        modifier = modifier,
+        color = color,
         text = value,
         style = textStyle,
         textAlign = TextAlign.Start,
@@ -279,10 +289,9 @@ fun CustomTextWithIconUI(imageVector: ImageVector?, title: String, textSize: Int
         imageVector?.let { Icon(imageVector = imageVector, contentDescription = "Work") }
         Spacer(modifier = Modifier.width(3.dp))
         TextUI(
-            textStyle = MaterialTheme.typography.bodyLarge.copy(),
+            textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
             textSize = textSize,
-            value = title,
-            fontWeight = FontWeight.Bold
+            value = title
         )
     }
 }
@@ -292,16 +301,18 @@ fun CustomTextWithIconUI(imageVector: ImageVector?, title: String, textSize: Int
 fun ProfileDetails(userDetails: ProfileResponse?) {
     Card(
         modifier = Modifier
+            .background(Color.White)
             .padding(4.dp)
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background),
+            .fillMaxWidth(),
         onClick = {},
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, Color.Black),
     ) {
         Column(
             modifier = Modifier
-                .padding(6.dp)
+                .background(Color.White)
+                .fillMaxWidth()
+                .padding(16.dp)
                 .height(IntrinsicSize.Min),
             verticalArrangement = Arrangement.spacedBy(6.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -373,13 +384,13 @@ fun DetailComposableUI(
 @Composable
 fun SubscriptionPlanUI(userDetails: ProfileResponse?) {
     Column(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.Start
     ) {
         TextUI(
-            textStyle = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-            textSize = 28,
+            textStyle = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.ExtraBold),
+            textSize = 32,
             value = "Subscription plan"
         )
 
@@ -403,12 +414,23 @@ fun SubscriptionPlanUI(userDetails: ProfileResponse?) {
 fun UserPostUI(userPostItem: UserPostsResponse?, onPostClicked: (String) -> Unit) {
 
     Column(
-        modifier = Modifier.padding(4.dp)
-            .clickable { userPostItem?.id },
+        modifier = Modifier
+            .padding(4.dp)
+            .clickable {
+                userPostItem?.let {
+                    onPostClicked(userPostItem.id)
+                }
+            },
         verticalArrangement = Arrangement.SpaceBetween,
         Alignment.CenterHorizontally,
     ) {
-        ProfileImage(profileImage = userPostItem?.postImageUrl, size = 100)
+        ProfileImage(
+            modifier = Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(BorderStroke(1.dp, Color.Gray)),
+            profileImage = userPostItem?.postImageUrl
+        )
 
         Text(text = userPostItem?.author ?: "Default name")
     }

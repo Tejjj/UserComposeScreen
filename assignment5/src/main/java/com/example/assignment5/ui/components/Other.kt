@@ -53,12 +53,10 @@ fun VerticalDivider(size: Int, color: Color) {
 
 
 @Composable
-fun ProfileImage(modifier: Modifier = Modifier, profileImage: String?, size: Int) {
+fun ProfileImage(modifier: Modifier = Modifier, profileImage: String?) {
     AsyncImage(
+        modifier = modifier,
         contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .size(size.dp)
-            .clip(RoundedCornerShape(12.dp)),
         model = ImageRequest.Builder(LocalContext.current).data(profileImage).crossfade(true)
             .placeholder(com.example.assignment5.R.drawable.ic_launcher_foreground)
             .error(R.drawable.mtrl_ic_error).build(),

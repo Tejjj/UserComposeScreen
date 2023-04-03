@@ -148,7 +148,10 @@ fun SearchBar(
                 .heightIn(min = 56.dp)
                 .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
             value = searchQuery,
-            onValueChange = { searchQuery = it },
+            onValueChange = {
+                searchQuery = it
+                onSearch(searchQuery)
+            },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Search, contentDescription = null)
             },

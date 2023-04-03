@@ -33,4 +33,9 @@ class NetworkRepository @Inject constructor(
         }.flow
 
 
+    suspend fun getUserById(userId: String): UserPostsResponse? {
+        val response = userPostService.getUserById(userId)
+        if (!response.isSuccessful) return null
+        return response.body()
+    }
 }

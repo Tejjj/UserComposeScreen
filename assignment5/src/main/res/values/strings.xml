@@ -5,4 +5,6 @@
     <string name="no_user">No result found for this user</string>
     <string name="streetName">StreetName</string>
     <string name="streetAddress">Street Address</string>
+    <string name="back_button">Back</string>
+    <string name="not_available">Not Available</string>
 </resources>

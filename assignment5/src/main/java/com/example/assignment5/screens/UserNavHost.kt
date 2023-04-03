@@ -1,5 +1,6 @@
 package com.example.assignment5.screens
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,14 +34,26 @@ fun UserNavHost(
             UserProfileScreen(modifier, viewModel, navController)
         }
 
-        composable(route = AppScreen.UserPostDetailScreen.route + "/{id}",
+        composable(
+            route = AppScreen.UserPostDetailScreen.route + "/{id}",
             arguments = listOf(
                 navArgument(name = "id") {
-                type = NavType.StringType
-            })
+                    type = NavType.StringType
+                })
         ) { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("id")
-            PostDetailsScreen(modifier, postDetailViewModel, navController)
+            val userId = backStackEntry.arguments?.getString("id")
+
+            if (userId.isNullOrEmpty()) {
+                Toast.makeText(context, "userId cannot be null .", Toast.LENGTH_SHORT).show()
+            } else {
+                PostDetailsScreen(
+                    modifier,
+                    postDetailViewModel,
+                    userId,
+                    navController,
+                    onNavigateUp = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

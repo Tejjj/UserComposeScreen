@@ -17,7 +17,7 @@ sealed class AppScreen(
         return buildString {
             append(route)
             args.forEach { arg ->
-                append("/{$arg}")
+                append("/$arg")
             }
         }
     }
