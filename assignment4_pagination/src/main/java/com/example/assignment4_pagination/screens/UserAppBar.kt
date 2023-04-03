@@ -28,10 +28,13 @@ fun UserAppBar(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {}
 ) {
-    if (canNavigateBack) {
-        TopAppBar(
-            title = { Text(text = title, style = MaterialTheme.typography.headlineLarge) },
-            navigationIcon = {
+    TopAppBar(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(BorderStroke(2.dp, MaterialTheme.colorScheme.outlineVariant)),
+        title = { Text(text = title, style = MaterialTheme.typography.headlineLarge) },
+        navigationIcon = {
+            if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = navIcon,
@@ -39,17 +42,7 @@ fun UserAppBar(
                         modifier = Modifier.size(64.dp)
                     )
                 }
-            },
-            modifier = modifier
-                .fillMaxWidth()
-                .border(BorderStroke(2.dp, MaterialTheme.colorScheme.outlineVariant))
-        )
-    } else {
-        TopAppBar(
-            title = { Text(text = title, style = MaterialTheme.typography.headlineLarge) },
-            modifier = modifier
-                .fillMaxWidth()
-                .border(BorderStroke(2.dp, MaterialTheme.colorScheme.outlineVariant))
-        )
-    }
+            }
+        }
+    )
 }

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">assignment5</string>
+    <string name="retry">Retry</string>
+    <string name="end_of_pagination">End of pagination</string>
+    <string name="no_user">No result found for this user</string>
+    <string name="streetName">StreetName</string>
+    <string name="streetAddress">Street Address</string>
+</resources>

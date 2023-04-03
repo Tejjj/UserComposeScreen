@@ -13,7 +13,7 @@ class RepositoryPagingDataSource(
     private val searchQuery: String
 ) : PagingSource<Int, UserRepository>() {
     override fun getRefreshKey(state: PagingState<Int, UserRepository>): Int? {
-        return return state.anchorPosition?.let { anchorPosition ->
+         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
