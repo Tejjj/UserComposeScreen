@@ -1,4 +1,4 @@
-package com.example.assignment5.ui.components
+package com.example.finalassignment.ui.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +32,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.google.android.material.R
+//import com.google.android.material.R
+import com.example.finalassignment.R
 
 @Composable
 fun VerticalSpacer(size: Int) = Spacer(modifier = Modifier.height(size.dp))
@@ -58,8 +59,32 @@ fun ProfileImage(modifier: Modifier = Modifier, profileImage: String?) {
         modifier = modifier,
         contentScale = ContentScale.Crop,
         model = ImageRequest.Builder(LocalContext.current).data(profileImage).crossfade(true)
-            .placeholder(com.example.assignment5.R.drawable.ic_launcher_foreground)
-            .error(R.drawable.mtrl_ic_error).build(),
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .error(com.google.android.material.R.drawable.mtrl_ic_error).build(),
+        contentDescription = null,
+    )
+}
+
+@Composable
+fun RoundedCornerImage(modifier: Modifier = Modifier, profileImage: String?) {
+    AsyncImage(
+        modifier = modifier,
+        contentScale = ContentScale.Crop,
+        model = ImageRequest.Builder(LocalContext.current).data(profileImage).crossfade(true)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .error(com.google.android.material.R.drawable.mtrl_ic_error).build(),
+        contentDescription = null,
+    )
+}
+
+@Composable
+fun RoundShapedImage(modifier: Modifier = Modifier, profileImage: String?) {
+    AsyncImage(
+        modifier = modifier,
+        contentScale = ContentScale.Crop,
+        model = ImageRequest.Builder(LocalContext.current).data(profileImage).crossfade(true)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .error(com.google.android.material.R.drawable.mtrl_ic_error).build(),
         contentDescription = null,
     )
 }
@@ -91,5 +116,4 @@ fun RetryItem(
         }
     }
 }
-
 
