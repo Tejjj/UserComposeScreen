@@ -1,5 +1,6 @@
 package com.example.finalassignment.screens
 
+import android.content.Context
 import android.icu.text.DateFormat
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -19,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,10 +36,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.finalassignment.R
 import com.example.finalassignment.navigation.TopLevelDestination
 import com.example.finalassignment.screens.viewModel.PostDetailsViewModel
@@ -48,6 +55,7 @@ import com.example.finalassignment.ui.components.ProfileImage
 import com.example.finalassignment.ui.components.VerticalSpacer
 import java.time.Instant
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +67,7 @@ fun PostDetailsScreen(
     navController: NavHostController
 ) {
 
+    val context = LocalContext.current
     var userDetails = remember { viewModel.postDetails }.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -92,12 +101,11 @@ fun PostDetailsScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        userDetails.value ?.let {
+                        userDetails.value?.let {
                             viewModel.deletePost(userId, postId)
                             navController.popBackStack()
                         }
 
-                    /*navController.navigate(TopLevelDestination.Settings.route)*/
                     }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
@@ -110,11 +118,12 @@ fun PostDetailsScreen(
     ) { innerPadding ->
 
         var userInfo = userDetails.value
-        Column(modifier = Modifier
-            .background(MaterialTheme.colorScheme.primary)
-            .padding(innerPadding)
-            .fillMaxSize()
-            ) {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
             Card(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primary)

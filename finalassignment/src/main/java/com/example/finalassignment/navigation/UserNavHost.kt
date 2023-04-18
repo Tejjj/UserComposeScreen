@@ -1,12 +1,15 @@
 package com.example.finalassignment.navigation
 
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -24,6 +27,7 @@ import com.example.finalassignment.screens.viewModel.ProfileViewModel
 import com.example.finalassignment.screens.viewModel.SettingsViewModel
 import com.example.finalassignment.screens.viewModel.UsersViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun UserNavHost(
     modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()
@@ -57,9 +61,6 @@ fun UserNavHost(
             })
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId")
-
-            userId.isNullOrEmpty()
-                .let { Toast.makeText(context, " Invalid User info.. ", Toast.LENGTH_SHORT).show() }
 
             userId?.let { ProfileScreen(profileViewModel, userId, navController) }
         }
@@ -99,7 +100,7 @@ fun UserNavHost(
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId")
             if (userId.isNullOrEmpty()) {
-                Toast.makeText(context, "Invalid user id", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "Invalid user id", Toast.LENGTH_SHORT).show()
             } else {
                 CreatePostScreen(createPostViewModel, userId, navController)
             }
@@ -109,32 +110,6 @@ fun UserNavHost(
         composable(route = TopLevelDestination.Settings.route) {
             SettingsScreen(settingsViewModel, navController)
         }
-
-        /*composable(route = AppScreen.ProfileScreen.route) {
-            UserProfileScreen(modifier, viewModel, navController)
-        }
-
-        composable(
-            route = AppScreen.UserPostDetailScreen.route + "/{id}",
-            arguments = listOf(
-                navArgument(name = "id") {
-                    type = NavType.StringType
-                })
-        ) { backStackEntry ->
-            val userId = backStackEntry.arguments?.getString("id")
-
-            if (userId.isNullOrEmpty()) {
-                Toast.makeText(context, "userId cannot be null .", Toast.LENGTH_SHORT).show()
-            } else {
-                PostDetailsScreen(
-                    modifier,
-                    postDetailViewModel,
-                    userId,
-                    navController,
-                    onNavigateUp = { navController.popBackStack() }
-                )
-            }
-        }*/
     }
 }
 

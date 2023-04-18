@@ -45,7 +45,7 @@ class NetworkRepository @Inject constructor(
     }
 
     suspend fun createPost(post: PostDetailResponse) {
-        apiService.createPost(post.userId,post)
+        apiService.createPost(post.userId, post)
     }
 
     suspend fun deletePost(userId: String, postId: String) {

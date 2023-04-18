@@ -244,7 +244,7 @@ fun createPost(
     }
 
     if(caption.isNullOrEmpty()) {
-        Toast.makeText(context, "Invalid Comments value.. please enter correct integer value", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, "Invalid Comments value.. please enter correct integer value", Toast.LENGTH_SHORT).show()
         return null
     }
 
