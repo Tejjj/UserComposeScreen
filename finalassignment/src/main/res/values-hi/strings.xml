@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">finalAssignment</string>
+    <string name="back_button">पीछे</string>
+    <string name="posts">पदों</string>
+    <string name="followers">अनुयायियों</string>
+    <string name="following">अगले</string>
+    <string name="name">नाम</string>
+    <string name="about">के बारे में</string>
+    <string name="end_of_pagination">पृष्ठांकन का अंत</string>
+    <string name="create_post">पोस्ट बनाएं</string>
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
+    <string name="no_posts">No Post\'s found for this user</string>
+</resources>

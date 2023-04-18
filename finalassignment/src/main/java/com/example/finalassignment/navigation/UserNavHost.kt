@@ -108,7 +108,7 @@ fun UserNavHost(
 
 
         composable(route = TopLevelDestination.Settings.route) {
-            SettingsScreen(settingsViewModel, navController)
+            SettingsScreen(navController)
         }
     }
 }

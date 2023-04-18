@@ -1,11 +1,15 @@
 <resources>
-    <string name="app_name">finalAssignment</string>
+    <string name="app_name" translatable="false">finalAssignment</string>
     <string name="back_button">Back</string>
-    <string name="posts">Posts</string>
+    <string name="posts" translatable="false">Posts</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="name">Name : </string>
     <string name="about">About : </string>
     <string name="end_of_pagination">End of pagination</string>
     <string name="create_post">Create Post</string>
+    <string name="app_language" translatable="false">App Language</string>
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
+    <string name="no_posts">No Post\'s found for this user</string>
 </resources>
