@@ -1,5 +1,6 @@
 package com.example.finalassignment.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,18 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
@@ -40,8 +38,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.finalassignment.R
 import com.example.finalassignment.model.UserPostsResponse
@@ -54,10 +56,13 @@ import com.example.finalassignment.utils.UserUIState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel,
     userId: String,
     navController: NavHostController,
 ) {
+    val viewModel: ProfileViewModel = hiltViewModel()
+
+    val context = LocalContext.current
+
     val userProfile = remember { viewModel.userProfile }.collectAsState()
 
     val userPostsUiState = remember { viewModel.userPostState }.collectAsState()
@@ -147,14 +152,30 @@ fun ProfileScreen(
             }
         }
 
+        (userPosts.value.isEmpty()).let {
+            Text(modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                fontSize = 28.sp,
+                text = stringResource(R.string.no_posts_found_for_this_user)
+            )
+        }
+
         val uiState = userPostsUiState.value
         when (uiState) {
             UserUIState.Empty -> {
-
+                Text(
+                    textAlign = TextAlign.Center,
+                    fontSize = 28.sp,
+                    text = stringResource(R.string.no_posts)
+                )
             }
 
             is UserUIState.Failure -> {
-
+                Toast.makeText(
+                    context,
+                    "Error has occured while fetching the user's posts.Please try after sometime",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             UserUIState.Loading -> {

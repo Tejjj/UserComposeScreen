@@ -59,7 +59,7 @@ class PostDetailsViewModel @Inject constructor(
                     .build()
             )
             .setInputData(data)
-            .setInitialDelay(5, TimeUnit.MINUTES)
+            .setInitialDelay(1, TimeUnit.MINUTES)
             .build()
 
         val workManager = WorkManager.getInstance(context)

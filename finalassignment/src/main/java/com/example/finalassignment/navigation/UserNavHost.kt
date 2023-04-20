@@ -62,7 +62,7 @@ fun UserNavHost(
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId")
 
-            userId?.let { ProfileScreen(profileViewModel, userId, navController) }
+            userId?.let { ProfileScreen(userId, navController) }
         }
 
         composable(

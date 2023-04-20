@@ -1,5 +1,6 @@
 package com.example.finalassignment.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -46,8 +47,10 @@ fun UserListView(
 ) {
 
     val context = LocalContext.current
+
     LazyVerticalGrid(
-        modifier = modifier.background(MaterialTheme.colorScheme.primary)
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.primary)
             .fillMaxSize(),
         columns = GridCells.Fixed(3),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -105,6 +108,7 @@ fun ProfileItem(profile: ProfileResponse, onUserClick: (ProfileResponse) -> Unit
         verticalArrangement = Arrangement.SpaceBetween,
         Alignment.CenterHorizontally,
     ) {
+        Log.d("PhotoChooserTejj", " UserList .. imageUrl is :: "+profile?.profileImageUrl)
         RoundShapedImage(
             modifier = Modifier
                 .size(100.dp)

@@ -30,7 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.finalassignment.R
 import com.example.finalassignment.model.UserProfileResponse
+import com.example.finalassignment.ui.components.HorizontalSpacer
 import com.example.finalassignment.ui.components.RoundShapedImage
+import com.example.finalassignment.utils.DescriptionTextUI
+import com.example.finalassignment.utils.TitleTextUI
 
 
 @Composable
@@ -43,58 +46,54 @@ fun UserProfileUI(modifier: Modifier = Modifier, userDetails: UserProfileRespons
             ) {
                 ProfileUI(userDetails)
 
-                Row(
-                    modifier = Modifier.padding(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextUI(
-                        modifier = Modifier.alignByBaseline(),
-                        color = MaterialTheme.colorScheme.secondary,
-                        textStyle = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                        textSize = 18,
-                        value = stringResource(R.string.name)
-                    )
-                    TextUI(
-                        modifier = Modifier.alignByBaseline(),
-                        color = MaterialTheme.colorScheme.tertiary,
-                        textStyle = MaterialTheme.typography.bodyMedium,
-                        textSize = 12,
-                        value = userDetails.name
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.padding(8.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextUI(
-                        modifier = Modifier.alignByBaseline(),
-                        color = MaterialTheme.colorScheme.secondary,
-                        textStyle = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                        textSize = 18,
-                        value = stringResource(R.string.about)
-                    )
-                    TextUI(
-                        modifier = Modifier.alignByBaseline(),
-                        color = MaterialTheme.colorScheme.tertiary,
-                        textStyle = MaterialTheme.typography.bodyMedium,
-                        textSize = 12,
-                        value = userDetails.name
-                    )
-                }
-
-                Divider(
-                    modifier = Modifier
-                        .padding(PaddingValues(vertical = 8.dp))
-                        .height(4.dp)
-                        .fillMaxWidth(), color = Color.Black
-                )
+                UserDetails(userDetails)
             }
         }
     }
+}
 
+@Composable
+fun UserDetails(userDetails: UserProfileResponse) {
+    Row(
+        modifier = Modifier.padding(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TitleTextUI(
+            modifier = Modifier.alignByBaseline(),
+            title = stringResource(R.string.name)
+        )
+        HorizontalSpacer(size = 8)
+
+        DescriptionTextUI(
+            modifier = Modifier.alignByBaseline().align(Alignment.CenterVertically),
+            description = userDetails.name
+        )
+    }
+
+    Row(
+        modifier = Modifier.padding(8.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TitleTextUI(
+            modifier = Modifier.alignByBaseline(),
+            title = stringResource(R.string.about)
+        )
+        HorizontalSpacer(size = 8)
+
+        DescriptionTextUI(
+            modifier = Modifier.alignByBaseline().align(Alignment.CenterVertically),
+            description = userDetails.about
+        )
+    }
+
+    Divider(
+        modifier = Modifier
+            .padding(PaddingValues(vertical = 8.dp))
+            .height(4.dp)
+            .fillMaxWidth(), color = Color.Black
+    )
 }
 
 
@@ -112,6 +111,7 @@ fun ProfileUI(userDetails: UserProfileResponse) {
                 .clip(CircleShape),
             profileImage = userDetails?.profileImageUrl
         )
+
         Row(
             modifier = Modifier
                 .weight(0.7f)
@@ -124,23 +124,9 @@ fun ProfileUI(userDetails: UserProfileResponse) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    color = MaterialTheme.colorScheme.tertiary,
-                    text = userDetails?.posts.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Start,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal
-                )
+                DescriptionTextUI(description = userDetails?.posts.toString())
 
-                Text(
-                    color = MaterialTheme.colorScheme.secondary,
-                    text = stringResource(R.string.posts),
-                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    textAlign = TextAlign.Start,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
-                )
+                TitleTextUI(title = stringResource(R.string.posts))
             }
 
             // Followers
@@ -148,23 +134,9 @@ fun ProfileUI(userDetails: UserProfileResponse) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    color = MaterialTheme.colorScheme.tertiary,
-                    text = userDetails?.posts.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Start,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal
-                )
+                DescriptionTextUI(description = userDetails?.followers.toString())
 
-                Text(
-                    color = MaterialTheme.colorScheme.secondary,
-                    text = stringResource(R.string.followers),
-                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    textAlign = TextAlign.Start,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
-                )
+                TitleTextUI(title = stringResource(R.string.followers))
             }
 
             //Following
@@ -172,23 +144,9 @@ fun ProfileUI(userDetails: UserProfileResponse) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    color = MaterialTheme.colorScheme.tertiary,
-                    text = userDetails?.posts.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Start,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal
-                )
+                DescriptionTextUI(description = userDetails?.following.toString())
 
-                Text(
-                    color = MaterialTheme.colorScheme.secondary,
-                    text = stringResource(R.string.following),
-                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    textAlign = TextAlign.Start,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
-                )
+                TitleTextUI(title = stringResource(R.string.following))
             }
         }
     }

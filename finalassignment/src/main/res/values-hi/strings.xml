@@ -12,4 +12,6 @@
     <string name="english">English</string>
     <string name="hindi">Hindi</string>
     <string name="no_posts">No Post\'s found for this user</string>
+    <string name="choose_image">Choose</string>
+    <string name="no_posts_found_for_this_user">No Posts found for this user.</string>
 </resources>
